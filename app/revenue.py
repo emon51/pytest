@@ -1,9 +1,15 @@
-def max_revenue(days: list[int]) -> int:
-    result: int = days[0]
-    curr: int = days[0]
+from collections.abc import Sequence
 
-    for revenue in days[1:]:
-        curr = max(revenue, curr + revenue)
-        result = max(result, curr)
 
-    return result
+def max_revenue(days: Sequence[int]) -> int:
+    if not days:
+        raise ValueError("days must not be empty")
+
+    best = days[0]
+    current = days[0]
+
+    for value in days[1:]:
+        current = max(value, current + value)
+        best = max(best, current)
+
+    return best

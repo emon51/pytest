@@ -1,26 +1,18 @@
 import pytest
-from app.calculator import add, divide  # import the function you want to test
-
-# Parametrized test (runs multiple cases)
-@pytest.mark.parametrize("a,b,result", [
-    (1, 2, 3),
-    (2, 3, 5),
-    (10, 20, 30)
-])
-def test_add(a, b, result):
-    assert add(a, b) == result
+from app.calculator import add, divide
 
 
-@pytest.mark.parametrize("a, b, result", [
-    ( 10, 2, 5),
-    (20, 4, 5),
-    (15, 3, 5)
-])
-def test_divide(a, b, result):
-    assert divide(a, b) == result
+def test_add(add_cases):
+    for a, b, expected in add_cases:
+        assert add(a, b) == expected
 
-# Test for division by zero
-def test_divide_by_zero():
+
+def test_divide(divide_cases):
+    for a, b, expected in divide_cases:
+        assert divide(a, b) == expected
+
+
+def test_divide_by_zero(divide_by_zero_case):
+    a, b = divide_by_zero_case
     with pytest.raises(ZeroDivisionError):
-        divide(10, 0)
-       
+        divide(a, b)
