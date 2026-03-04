@@ -15,7 +15,8 @@ project/
 └── venv/
 ```
 
-# Parameterize Test Basic Syntax:
+# Parametrized Test:
+### Syntax:
 1. import pytest
 2. import the function to test
 3. @pytest.mark.parametrize("param1,param2", [ (val1,val2), ... ])
@@ -56,3 +57,18 @@ python_files = test_*.py
 # -v means verbose mode (shows detailed test results)
 addopts = -v
 ```
+
+# Fixtures: 
+Fixtures is “ready-to-use test resources” for tests — setup done once, reused everywhere.
+### Syntax: 
+1. Define fixture: @pytest.fixture
+2. Return or yield resources
+3. Use fixture: pass its name as a test function parameter
+4. Pytest injects the value automatically
+
+
+
+# Pytest Core Concepts: 
+- Fixtures for reusable setup/data
+- Parameterized tests for multiple test cases
+- Exception testing with pytest.raises()
