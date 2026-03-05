@@ -72,3 +72,208 @@ Fixtures is “ready-to-use test resources” for tests — setup done once, reu
 - Fixtures for reusable setup/data
 - Parameterized tests for multiple test cases
 - Exception testing with pytest.raises()
+
+# Practice Problems: 
+## 1. Testing a Function with Multiple Inputs (Parametrize)
+Code:
+```bash
+def multiply(a: int, b: int) -> int:
+    return a * b
+```
+### Practice Task: 
+Write a pytest test using parametrize for:
+```bash
+(2,3) → 6
+(4,5) → 20
+(10,0) → 0
+```
+### Goal: practice @pytest.mark.parametrize
+Solution:
+```bash
+import pytest 
+def multiply(a: int, b: int) -> int:
+    return a * b
+
+@pytest.mark.parametrize("a, b, expected", [
+    (2, 3, 6),
+    (4, 5, 20), 
+    (10, 0, 0)
+])
+def test_multiply(a: int, b: int, expected: int) -> None:
+    assert multiply(a, b) == expected
+```
+
+## 2. Testing Exceptions
+Code:
+```bash
+def withdraw(balance: int, amount: int) -> int:
+    if amount > balance:
+        raise ValueError("Insufficient balance")
+    return balance - amount
+```
+### Practice Task: 
+Write a test for:
+```bash
+1. withdraw(100, 50) → 50
+2. withdraw(100, 150) → should raise ValueError
+```
+### Goal: practice pytest.raises()
+Solution:
+```bash
+import pytest 
+
+def withdraw(balance: int, amount: int) -> int:
+    if amount > balance:
+        raise ValueError("Insufficient balance")
+    return balance - amount
+
+
+def test_withdraw_success():
+    assert withdraw(100, 50) == 50
+
+
+def test_withdraw_insufficient_balance():
+    with pytest.raises(ValueError):
+        withdraw(100, 150)
+```
+## 3. Using Fixtures for Reusable Data
+Code:
+```bash
+def average(numbers: list[int]) -> float:
+    return sum(numbers) / len(numbers)
+```
+### Practice Task: 
+Create a fixture that returns:
+```bash
+[10, 20, 30, 40]
+```
+Then write a test verifying the average is **25**.
+### Goal: practice fixtures
+Solution:
+```bash
+import pytest 
+def average(numbers: list[int]) -> float:
+    return sum(numbers) / len(numbers)
+
+@pytest.fixture
+def numbers() -> list[int]:
+    return [10, 20, 30, 40]
+
+def test_average(numbers: list[int]) -> None:
+    assert average(numbers) == 25
+# It's optional for the problem but a professional test should also check empty list
+def test_average_emty():
+    with pytest.raises(ZeroDivisionError):
+        average([])
+# sum([]) / len([])
+#  0 / 0
+# ZeroDivisionError
+```
+
+## 4. Testing Edge Cases
+Code:
+```bash
+def is_even(n: int) -> bool:
+    return n % 2 == 0
+```
+### Practice Task: 
+Create a test for:
+```bash
+2 → True
+3 → False
+0 → True
+-2 → True
+```
+### Goal: practice edge cases
+Solution:
+```bash
+import pytest 
+
+def is_even(n: int) -> bool:
+    if n < 0:
+        raise ValueError("number can't be negative")
+    return n % 2 == 0
+
+@pytest.mark.parametrize("n, expected", [
+    (0, True), 
+    (2, True), 
+    (3, False)
+])
+def test_is_even(n: int, expected: bool) -> None:
+    assert is_even(n) == expected 
+
+def test_is_even_negative() -> None:
+    with pytest.raises(ValueError):
+        is_even(-2)
+```
+
+## 5. Fixture + Parametrize Together (Professional Pattern)
+Code:
+```bash
+def power(base: int, exp: int) -> int:
+    return base ** exp
+```
+### Practice Task: 
+Create a fixture containing:
+```bash
+(2,2,4)
+(3,2,9)
+(5,3,125)
+```
+Then write a test that loops through them.
+### Goal: combine fixtures + assertions
+Solution:
+```bash
+import pytest 
+def power(base: int, exp: int) -> int:
+    return base ** exp
+
+@pytest.fixture 
+def test_cases() -> list[tuple[int, int, int]]:
+    return [
+        (2, 2, 4), 
+        (3, 2, 9), 
+        (5, 3, 125)
+    ]
+
+def test_power(test_cases: list[tuple[int, int, int]]) -> None:
+    for base, exp, expected in test_cases:
+        assert power(base, exp) == expected 
+        
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
